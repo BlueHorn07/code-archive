@@ -72,7 +72,7 @@ export class BookLibRepository {
       TableName: this.tableName,
       Item: {
         book_id: book_id,
-        bookbook_name: book_name,
+        book_name: book_name,
         author: author,
         content: content,
       }

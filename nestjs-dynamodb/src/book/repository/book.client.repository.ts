@@ -75,7 +75,7 @@ export class BookClientRepository {
       TableName: this.tableName,
       Item: {
         book_id: {S: book_id},
-        bookbook_name: {S: book_name},
+        book_name: {S: book_name},
         author: {S: author},
         content: {S: content},
       }

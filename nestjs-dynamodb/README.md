@@ -67,7 +67,7 @@ Practice AWS DynamoDB with NestJS.
     "content": {
         "S": "I bless rains down in Africa"
     },
-    "bookbook_name": {
+    "book_name": {
         "S": "Africa"
     },
     "book_id": {
@@ -83,7 +83,7 @@ Practice AWS DynamoDB with NestJS.
 // `@aws-sdk/lib-dynamodb`
 {
     "content": "I bless rains down in Africa",
-    "bookbook_name": "Africa",
+    "book_name": "Africa",
     "book_id": "toto",
     "author": "TOTO"
 }
