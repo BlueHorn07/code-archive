@@ -7,8 +7,13 @@ import {
   ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 
+/**
+ * The Book Repository only using `@aws-sdk/client-dynamodb`.
+ * Please, see and compare the code of `book.lib.repository.ts` also.
+ */
+
 @Injectable()
-export class BookRepository {
+export class BookClientRepository {
   private tableName: string;
   private dynamodb: DynamoDBClient;
 
@@ -17,15 +22,11 @@ export class BookRepository {
     this.dynamodb = new DynamoDBClient({ region: 'ap-northeast-2' });
   }
 
-  getAllBook() {
-    const scanCommand = new ScanCommand({
-      TableName: this.tableName,
-    });
+  /**
+   * Query
+   */
 
-    return this.dynamodb.send(scanCommand);
-  }
-
-  getBook(book_id: string) {
+  async getBook(book_id: string) {
     const getCommand = new GetItemCommand({
       TableName: this.tableName,
       Key: {
@@ -33,10 +34,25 @@ export class BookRepository {
       },
     });
 
-    return this.dynamodb.send(getCommand);
+    const res = await this.dynamodb.send(getCommand);
+    return res['Item'];
   }
 
-  searchBookByContent(content_keyword: string) {
+
+  /**
+   * Scan
+   */
+
+  async getAllBook() {
+    const scanCommand = new ScanCommand({
+      TableName: this.tableName,
+    });
+
+    const res = await this.dynamodb.send(scanCommand);
+    return res['Items'];
+  }
+
+  async searchBookByContent(content_keyword: string) {
     const scanCommand = new ScanCommand({
       TableName: this.tableName,
       FilterExpression: `contains (content, :keyword)`,
@@ -45,8 +61,14 @@ export class BookRepository {
       },
     })
 
-    return this.dynamodb.send(scanCommand);
+    const res = await this.dynamodb.send(scanCommand);
+    return res['Items'];
   }
+
+
+  /**
+   * Put
+   */
 
   putBook(book_id: string, book_name: string, author: string, content: string) {
     const putCommand = new PutItemCommand({
@@ -61,6 +83,11 @@ export class BookRepository {
 
     return this.dynamodb.send(putCommand);
   }
+
+
+  /**
+   * Delete
+   */
 
   deleteBook(book_id: string) {
     const deleteCommand = new DeleteItemCommand({

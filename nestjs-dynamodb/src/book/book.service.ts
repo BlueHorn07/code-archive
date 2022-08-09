@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BookDto, BookSearchDto } from './book.dto';
-import { BookRepository } from './book.repository';
+import { BookRepository } from './repository/book.repository';
 
 @Injectable()
 export class BookService {
@@ -23,7 +23,6 @@ export class BookService {
 
   putBook(bookDto: BookDto) {
     const {book_id, book_name, author, content} = bookDto;
-    console.log(bookDto);
     return this.bookRepo.putBook(book_id, book_name, author, content);
   }
 
