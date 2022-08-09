@@ -10,11 +10,11 @@ import {
 @Injectable()
 export class BookRepository {
   private tableName: string;
-  private dynmodb: DynamoDBClient;
+  private dynamodb: DynamoDBClient;
 
   constructor() {
     this.tableName = 'online-library';
-    this.dynmodb = new DynamoDBClient({ region: 'ap-northeast-2' });
+    this.dynamodb = new DynamoDBClient({ region: 'ap-northeast-2' });
   }
 
   getAllBook() {
@@ -22,7 +22,7 @@ export class BookRepository {
       TableName: this.tableName,
     });
 
-    return this.dynmodb.send(scanCommand);
+    return this.dynamodb.send(scanCommand);
   }
 
   getBook(book_id: string) {
@@ -33,7 +33,7 @@ export class BookRepository {
       },
     });
 
-    return this.dynmodb.send(getCommand);
+    return this.dynamodb.send(getCommand);
   }
 
   searchBookByContent(content_keyword: string) {
@@ -45,7 +45,7 @@ export class BookRepository {
       },
     })
 
-    return this.dynmodb.send(scanCommand);
+    return this.dynamodb.send(scanCommand);
   }
 
   putBook(book_id: string, book_name: string, author: string, content: string) {
@@ -59,7 +59,7 @@ export class BookRepository {
       }
     })
 
-    return this.dynmodb.send(putCommand);
+    return this.dynamodb.send(putCommand);
   }
 
   deleteBook(book_id: string) {
@@ -70,10 +70,7 @@ export class BookRepository {
       },
     });
 
-    return this.dynmodb.send(deleteCommand);
+    return this.dynamodb.send(deleteCommand);
   }
-
-  updateBook(book_id: string, ) {
-
-  }
+  
 }

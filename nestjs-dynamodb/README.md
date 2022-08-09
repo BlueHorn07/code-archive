@@ -1,18 +1,20 @@
-# NestJS-DynomDB
+# NestJS-DynamoDB
 
 Practice AWS DynamoDB with NestJS.
 
 ## DynamoDB Guide
 
-[@aws-sdk/client-dynamodb](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/index.html)
+[`@aws-sdk/client-dynamodb`](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/index.html)
 
 - NoSQL
-  - `JOIN`과 같은 관계형 연산이 없음. 
+  - `JOIN`과 같은 관계형 연산이 없음.
   - `SELECT ... FROM ...` 형태의 SQL 쓸 수 없음.
 - 테이블의 속성이 동적임.
 - 로깅 데이터를 저장하는데 좋음.
-- 파티션키와 정렬키를 잘 지정하는게 중요.
+- 파티션키와 정렬키(SK)를 잘 지정하는게 중요.
   - ex) 파티션키 = `player_id`, 정렬키 = `last_login_ts`
+  - SK는 `date`, `datetime`과 같이 RANGE 형태의 자료로 설정하는 것이 좋음.
+    - SK는 Query에서 `BETWEEN`, `>, >=, <=, <`와 같이 비교 연산을 할 수 있기 때문!
 
 아래와 같은 패턴으로 코드를 작성.
 
@@ -36,14 +38,15 @@ this.dynmodb.send(command);
   - `GetItemCommand()` 사용
 - Scan
   - 파티션키, 정렬키 이외의 키로 데이터를 읽어오는 방식
-  - 전체 데이터 모두 읽어올 수 있음
+  - 무조건 Full scan을 함.
   - Query와 비교해 속도가 느림
   - `ScanCommand()` 사용
 
 
 ### Response
 
-Mysql과 RDS와 다르게 `$metadata`가 있고, `Item`에 쿼리 값이 담겨서 옴.
+Mysql과 RDS와 다르게 `$metadata`가 있고, `Item`에 쿼리 값이 담겨서 옴. 
+`ScanCommand()`와 같이 반환되는 값이 여러개면 `Items`에 담겨서 옴.
 
 ```json
 {
@@ -70,4 +73,4 @@ Mysql과 RDS와 다르게 `$metadata`가 있고, `Item`에 쿼리 값이 담겨�
 - 언제 DynamoDB를 쓰는게 좋을지 사례를 보고 경험을 쌓아야 할 듯
 - ORM이 없어서 직접 `Repository.ts`를 구현하는 걸까? 
   - `Service.ts`에 dynamodb client를 넣어도 되지 않을까?라고 고민했는데...
-  - dynamodb를 쓰다가 RDS로 바꾸는 상황에서 쉽게 교체하는 상황을 감안해서 `Repository.ts`로 분리하는 거겠지?
+  - dynamodb를 쓰다가 RDS로 바꾸는 상황에서 쉽게 교체할 걸 감안해서 `Repository.ts`로 분리하는 거겠지?
