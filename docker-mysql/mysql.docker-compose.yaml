@@ -1,0 +1,14 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    container_name: my_mysql
+    ports:
+      - xxxx:3306 # HOST:CONTAINER
+    environment:
+      MYSQL_ROOT_PASSWORD: xxxx
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes: # 절대 경로로 설정할 것!
+      - /xxx/xxxx:/var/lib/mysql
