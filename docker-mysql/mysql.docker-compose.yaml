@@ -1,10 +1,10 @@
-version: '3'
+version: '3.8'
 services:
   mysql:
     image: mysql
     container_name: my_mysql
     ports:
-      - xxxx:3306 # HOST:CONTAINER
+      - 3306:3306 # HOST:CONTAINER
     environment:
       MYSQL_ROOT_PASSWORD: xxxx
     command:

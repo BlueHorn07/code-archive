@@ -12,7 +12,11 @@ Docker로 mysql 인프라 구축
 # run mysql container
 docker run --name my_mysql -p xxxx:3306 -e MYSQL_ROOT_PASSWORD=my_password -d mysql
 
-# connect
+# access to the container
+$ docker exec -it my_mysql /bin/bash
+mysql -uroot -p
+
+# (mysql client 설치가 되어 있을 때)
 mysql -uroot -p -h localhost --port xxxx
 ```
 
