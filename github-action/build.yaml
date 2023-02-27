@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+      - master
+
+name: Github Action for build
+
+jobs:
+  npm-build:
+    name: npm build check
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+  docker-build:
+    name: Docker build check
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - run: docker build . -t hello-my-app
