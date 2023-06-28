@@ -1,0 +1,1 @@
+@hourly /usr/bin/docker system prune -f
