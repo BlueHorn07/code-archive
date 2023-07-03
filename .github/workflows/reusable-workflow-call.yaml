@@ -6,7 +6,8 @@ on:
 
 jobs:
   echo:
-    runs-ons: ubuntu-latest
+    name: "Echo Test"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/echo
