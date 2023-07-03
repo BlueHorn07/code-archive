@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/echo
-        with:
-          input_strin: "HAHAHA"
-        secrets:
-          secret_string: "HOHOHO"
+      - run: echo "Hello World"
+      # - uses: ./.github/actions/echo
+        # with:
+          # input_strin: "HAHAHA"
+        # secrets:
+          # secret_string: "HOHOHO"
