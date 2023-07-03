@@ -2,7 +2,7 @@ name: Resuable Workflow Call Test
 
 on:
   push:
-    paths: [".github/"]
+    # paths: [".github/"]
 
 jobs:
   echo:
