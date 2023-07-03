@@ -1,0 +1,16 @@
+name: Resuable Workflow Call Test
+
+on:
+  push:
+    paths: [".github/"]
+
+jobs:
+  echo:
+    runs-ons: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/echo
+        with:
+          input_strin: "HAHAHA"
+        secrets:
+          secret_string: "HOHOHO"

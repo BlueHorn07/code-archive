@@ -1,0 +1,20 @@
+name: Echo Action
+
+on:
+  workflow_call:
+    inputs:
+      input_string:
+        required: true
+        type: string
+    secrets:
+      secret_string:
+        required: true
+
+jobs:
+  do_echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: |
+          echo "Input string: ${{ inputs.input_string }}"
+          echo "Secret string: ${{ secrets.secret_string }}"
