@@ -16,3 +16,12 @@ jobs:
           input_strin: "HAHAHA"
         # secrets:
           # secret_string: "HOHOHO"
+
+  echo2:
+    name: "Echo Test"
+    # runs-on: ubuntu-latest
+    uses: ./.github/actions/echo/action.yaml
+    with:
+      input_strin: "HAHAHA"
+    # secrets:
+      # secret_string: "HOHOHO"
