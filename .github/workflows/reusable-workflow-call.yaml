@@ -14,5 +14,5 @@ jobs:
       - uses: ./.github/actions/echo
         with:
           input_strin: "HAHAHA"
-        secrets:
-          secret_string: "HOHOHO"
+        # secrets:
+          # secret_string: "HOHOHO"
