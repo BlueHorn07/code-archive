@@ -13,7 +13,7 @@ jobs:
       - run: echo "Hello World"
       - uses: ./.github/actions/echo
         with:
-          input_strin: "HAHAHA"
+          input_string: "HAHAHA"
         # secrets:
           # secret_string: "HOHOHO"
 
