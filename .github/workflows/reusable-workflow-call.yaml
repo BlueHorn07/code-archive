@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "Hello World"
-      # - uses: ./.github/actions/echo
-        # with:
-          # input_strin: "HAHAHA"
-        # secrets:
-          # secret_string: "HOHOHO"
+      - uses: ./.github/actions/echo
+        with:
+          input_strin: "HAHAHA"
+        secrets:
+          secret_string: "HOHOHO"
