@@ -5,8 +5,8 @@ on:
     # paths: [".github/"]
 
 jobs:
-  echo:
-    name: "Echo Test"
+  echo-composite:
+    name: "Echo Composite Test"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,14 +14,12 @@ jobs:
       - uses: ./.github/actions/echo
         with:
           input_string: "HAHAHA"
-        # secrets:
-          # secret_string: "HOHOHO"
 
-  # echo2:
-  #   name: "Echo Test"
-  #   # runs-on: ubuntu-latest
-  #   uses: ./.github/actions/echo/action.yaml
-  #   with:
-  #     input_strin: "HAHAHA"
-  #   # secrets:
-  #     # secret_string: "HOHOHO"
+  echo-reusable:
+    name: "Echo Reusable Test"
+    # runs-on: ubuntu-latest
+    uses: bluehorn07/code-archive/.github/actions/echo-resuable.yaml@resuable-workflow
+    with:
+      username: "HAHAHA"
+    secrets:
+      SECRET_SEED: "HOHOHO"
