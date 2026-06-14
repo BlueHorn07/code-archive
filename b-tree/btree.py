@@ -19,19 +19,19 @@ class BTree:
         # 내려가기 전에 root가 꽉 차 있는지 확인해야 함.
         root = self.root
 
-        if len(root.keys) < 3:
-            self.insert_non_full(root, key)
-        elif len(root.keys) == 3:
+        if len(root.keys) == 3:
             new_root = BTreeNode(leaf=False)
             new_root.children.append(root)
 
             self.root = new_root
-            self.split_child(new_root, 0)
+            self._split_child(new_root, 0)
 
             # 이제 새로운 key insert 가능.
-            self.insert_non_full(new_root, key)
+            self._insert_non_full(new_root, key)
+        else:
+            self._insert_non_full(root, key)
 
-    def insert_non_full(self, node, key):
+    def _insert_non_full(self, node, key):
         if node.leaf:
             if key in node.keys:
                 print(f"Key {key} already exists in the tree.")
@@ -41,35 +41,40 @@ class BTree:
             return
 
         # leaf가 아니라면, 어느 child로 내려갈지 찾아야 함.
-        idx = None
-        for i in range(len(node.keys)):
-            n_key = node.keys[i]
+        idx, key_exists = self._find_child_index(node, key)
 
-            if key < n_key:
-                idx = i
-                break
-            elif key == n_key:
-                print(f"Key {key} already exists in the tree.")
-                return
-
-        if idx is None:
-            # key가 node의 모든 key보다 크다면, 마지막 child로 내려감.
-            idx = len(node.keys)
+        if key_exists:
+            print(f"Key {key} already exists in the tree.")
+            return
 
         if len(node.children[idx].keys) == 3:
             # 내려갈 child가 꽉 차 있다면, 먼저 분할해야 함.
-            self.split_child(node, idx)
+            self._split_child(node, idx)
 
             # 분할 후에 다시 어느 child로 내려갈지 찾아야 함.
-            if key > node.keys[idx]:
-                idx += 1
-            elif key == node.keys[idx]:
+            idx, key_exists = self._find_child_index(node, key)
+
+            if key_exists:
                 print(f"Key {key} already exists in the tree.")
                 return
 
-        self.insert_non_full(node.children[idx], key)
+        self._insert_non_full(node.children[idx], key)
 
-    def split_child(self, parent, idx):
+    def _find_child_index(self, node, key):
+        """
+        internal node에서 어느 child로 내려갈지 결정.
+        """
+
+        for i, n_key in enumerate(node.keys):
+            if key == n_key:
+                return i, True
+
+            if key < n_key:
+                return i, False
+
+        return len(node.keys), False
+
+    def _split_child(self, parent, idx):
         # parant의 idx 번째 자식 노드를 분할해 parent의 자식 노드로 추가하는 함수
         child = parent.children[idx]
 
@@ -96,21 +101,15 @@ class BTree:
         return self._search_node(self.root, key)
 
     def _search_node(self, node, key):
-        if key in node.keys:
+        idx, key_exists = self._find_child_index(node, key)
+
+        if key_exists:
             return True
-        elif node.leaf:
+
+        if node.leaf:
             return False
-        else:
-            idx = None
-            for i, n_key in enumerate(node.keys):
-                if key < n_key:
-                    idx = i
-                    break
 
-            if idx is None:
-                idx = len(node.keys)
-
-            return self._search_node(node.children[idx], key)
+        return self._search_node(node.children[idx], key)
 
     def print_tree(self):
         self._print_node(self.root, "", True)
