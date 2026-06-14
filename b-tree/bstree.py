@@ -66,6 +66,7 @@ class BST():
     parent = None
     current = self.root
 
+    # 어떤 노드를 삭제해야 하는지 탐색
     while True:
       if key == current.key:
         break
@@ -110,11 +111,13 @@ class BST():
         parent.right = current.left
 
     # current의 자식이 2개인 경우
+    # 오른쪽 서브트리에서 가장 작은 값을 찾아서 교체
     if current.left is not None and current.right is not None:
       print(f"Remove {key} from BST with 2 children")
       right = current.right
       right_parent = current
 
+      # `right.left`을 탐색하면서, 가장 작은 값의 노드를 탐색
       while right.left:
         right_parent = right
         right = right.left

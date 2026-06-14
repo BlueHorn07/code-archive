@@ -10,7 +10,7 @@
   - 노드 당 key 갯수는 `2t - 1`까지 가능함.
   - 그리고 노드 내에서는 key를 정렬된 상태로 저장함.
 
-## 최대 child 갯수는 key 갯수 `k`보다 하나 더 만도록 설계 된다.
+## 자식 노드의 갯수는 key 갯수 `k`보다 하나 더 만도록 설계 된다.
 
 - BST 트리에서 자식 노드 수는 항상 left/right 2개 였음.
 - B-Tree에서 key 갯수는 `2t-1`이 가능함.
@@ -37,7 +37,9 @@ https://youtu.be/iNvYsGKelYs?si=Ejjmhj7x76kcQq34
 
 
 
-# 왜 keys가 3이 되면 선제적으로 split 하는가?
+# ### 4에 도달하면 노드를 분할하는게 아니라, 왜 3까지 차면 노드를 분할할까?
+
+왜 keys가 3이 되면 선제적으로 split 하는가?
 
 ```
     [10 | 20 | 30]
@@ -50,11 +52,11 @@ https://youtu.be/iNvYsGKelYs?si=Ejjmhj7x76kcQq34
 1번
 
 ```
-      [20]
-    /    \
-    [10]   [30]
-   /   \   /   \
-   [5]  [15] [25] [35, 40]
+         [20]
+      /        \
+    [10]       [30]
+   /   \        /   \
+   [5]  [15] [25] [35|40]
 ```
 
 2번
@@ -67,9 +69,10 @@ https://youtu.be/iNvYsGKelYs?si=Ejjmhj7x76kcQq34
 
 1번, 2번 둘다 가능함.
 
-1번은 top-down 방식으로 삽입 연산을 하기 위해 트리를 순회할 때마다, 항상 `if node.key is full: split node`를 먼저 수행함.
+1번은 top-down 방식으로 삽입 연산을 하기 위해 트리를 순회할 때마다,
+`if node.key is full: split node`를 체크하고, 노드 분할을 수행합니다.
 
-즉, full 상태의 노드는 삽입 연산을 위해 노드를 탐색하는 과정에서 모두 split 됨.
+즉, full(=3) 상태의 노드 탐색 과정에서 모두 사전 분할(pre-split) 됩니다.
 
 2번은 내가 실제로 삽입하려는 노드가 full 상태가 되면 split node를 수행함. 이 경우, split 하면서 child -> parent로 key를 올려주게 되는데, paraent가 꽉 차 있으면, parent를 한번더 split 해줘야 함.
 

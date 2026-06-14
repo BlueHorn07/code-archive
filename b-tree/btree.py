@@ -2,12 +2,14 @@
 # t=2를 기준으로 구현하였음. 각 노드는 최대 3개의 키를 가질 수 있음.
 # t 일반화 하지 X
 
+from __future__ import annotations
+
 class BTreeNode:
-  def __init__(self, leaf=True):
+  def __init__(self, leaf: bool = True):
     # leaf 여부는 len(children) == 0으로도 판단할 수 있음.
     self.leaf = leaf
-    self.keys = []
-    self.children = []
+    self.keys: list[int] = []
+    self.children: list[BTreeNode] = []
 
 class BTree:
   def __init__(self):
@@ -15,12 +17,15 @@ class BTree:
     self.t = 2
     self.root = BTreeNode(leaf=True)
 
-  def insert(self, key):
+  def insert(self, key: int):
     # 내려가기 전에 root가 꽉 차 있는지 확인해야 함.
     root = self.root
 
     if len(root.keys) == 3:
+      # 신규 루트를 발급
       new_root = BTreeNode(leaf=False)
+
+      # 지금의 루트를 신규 루트에 붙임
       new_root.children.append(root)
 
       self.root = new_root
@@ -31,7 +36,10 @@ class BTree:
     else:
       self._insert_non_full(root, key)
 
-  def _insert_non_full(self, node, key):
+  def _insert_non_full(self, node: BTreeNode, key: int):
+    if len(node.keys) >= 3:
+      raise ValueError("Node is full.")
+
     if node.leaf:
       if key in node.keys:
         print(f"Key {key} already exists in the tree.")
@@ -60,7 +68,7 @@ class BTree:
 
     self._insert_non_full(node.children[idx], key)
 
-  def _find_child_index(self, node, key):
+  def _find_child_index(self, node: BTreeNode, key: int) -> tuple[int, bool]:
     """
     internal node에서 어느 child로 내려갈지 결정.
     """
@@ -74,7 +82,7 @@ class BTree:
 
     return len(node.keys), False
 
-  def _split_child(self, parent, idx):
+  def _split_child(self, parent: BTreeNode, idx: int):
     # parant의 idx 번째 자식 노드를 분할해 parent의 자식 노드로 추가하는 함수
     child = parent.children[idx]
 
@@ -91,18 +99,20 @@ class BTree:
       new_child.children = child.children[2:]
       child.children = child.children[:2]
 
-    # 부모의 mid key를 삽입
+    # 부모 노드의 idx 번째 자식 노드에 mid key를 삽입
     parent.keys.insert(idx, mid_key)
 
     # 부모의 자식 목록에 새 child를 삽입
     parent.children.insert(idx + 1, new_child)
 
-  def search(self, key):
+  def search(self, key: int):
     return self._search_node(self.root, key)
 
-  def _search_node(self, node, key):
+  def _search_node(self, node: BTreeNode, key: int):
+    # 어떤 child를 탐색할지 결정
     idx, key_exists = self._find_child_index(node, key)
 
+    # 만약 key가 node에 있다면, True를 반환
     if key_exists:
       return True
 
@@ -114,7 +124,7 @@ class BTree:
   def print_tree(self):
     self._print_node(self.root, "", True)
 
-  def _print_node(self, node, prefix, is_last):
+  def _print_node(self, node: BTreeNode, prefix: str, is_last: bool):
     connector = "└── " if is_last else "├── "
 
     print(prefix + connector +

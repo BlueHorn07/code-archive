@@ -1,28 +1,29 @@
+from __future__ import annotations
+
 class BPlusTreeNode:
-  def __init__(self, leaf=True):
+  def __init__(self, leaf: bool = True):
     self.leaf = leaf
-    self.keys = []
+    self.keys: list[int] = []
 
     # internal node에서만 사용
-    self.children = []
+    self.children: list[BPlusTreeNode] = []
 
     # leaf node에서만 사용
-    self.next = None
-
+    self.next: BPlusTreeNode | None = None
 
 class BPlusTree:
   def __init__(self):
     self.t = 2
     self.root = BPlusTreeNode(leaf=True)
 
-  def search(self, key):
+  def search(self, key: int):
     # internal node에 있는 key는 길 안내용 key임.
     # 중간에 key와 일치하는 값이 internal node에 있더라도, 항상 leaf node 끝까지 내려가야 함.
 
     leaf = self._find_leaf(self.root, key)
     return key in leaf.keys
 
-  def _find_leaf(self, node, key):
+  def _find_leaf(self, node: BPlusTreeNode, key: int):
     """
     key가 들어있을 가능성이 있는 leaf node까지 내려가는 함수
     B+Tree는 검색이 항상 leaf에서 끝남.
@@ -39,16 +40,22 @@ class BPlusTree:
     if len(root.keys) == 3:
       # root가 꽉 차 있다면, 새로운 root를 만들고 split
       new_root = BPlusTreeNode(leaf=False)
+
+      # 지금의 루트를 신규 루트에 붙임
       new_root.children.append(root)
 
-      self._split_child(new_root, 0)
       self.root = new_root
+      self._split_child(new_root, 0)
 
+      # 이제 새로운 key를 insert
       self._insert_non_full(root, key)
     else:
       self._insert_non_full(root, key)
 
   def _insert_non_full(self, node: BPlusTreeNode, key: int):
+    if len(node.keys) >= 3:
+      raise ValueError("Node is full.")
+
     if node.leaf:
       if key in node.keys:
         print(f"Key {key} already exists in the tree.")
